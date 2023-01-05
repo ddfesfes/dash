@@ -19,3 +19,8 @@ $ npm run build
 
 ## TODO
 - [ ] Flask / pycord (watchdog) threading
+- [ ] Add terminal
+- [ ] Add status
+- [ ] Add reload / stop / start button
+
+> 오늘의 노래: The Living Tombstone - My Ordinary Life
