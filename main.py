@@ -67,16 +67,4 @@ def removeCommand():
     return jsonify({ 'code': 'success' })
 
 if __name__ == '__main__':
-    # global t1
-    # global t2
-
-    # t1 = Thread(target=bot.run)
-    # t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': False})
-
-    # t1.start()
-    # t2.start()
-
-    # t1.join()
-    # t2.join()
-
     app.run(host='127.0.0.1', port=5000, debug=True)
