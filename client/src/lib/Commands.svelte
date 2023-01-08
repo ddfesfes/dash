@@ -1,5 +1,4 @@
 <script>
-  // @ts-nocheck
   import CodeEditor from 'svelte-code-editor';
   import UtilModal from './UtilModal.svelte';
   import Modal from './Modal.svelte';

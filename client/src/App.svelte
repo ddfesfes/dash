@@ -1,5 +1,4 @@
 <script>
-  // @ts-nocheck
   import CodeEditor from 'svelte-code-editor';
   import Commands from './lib/Commands.svelte';
   

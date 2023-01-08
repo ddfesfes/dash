@@ -1,5 +1,4 @@
 <script>
-	// @ts-nocheck
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
 	const dispatch = createEventDispatcher();

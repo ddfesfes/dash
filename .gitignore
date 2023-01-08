@@ -23,11 +23,15 @@ dist-ssr
 *.sln
 *.sw?
 
+# Data
 .env
 
+# Cache
 __pycache__
 
-test.py
-ttt.py
-
+# Own Files
+commands/*
 assets
+*.py
+!discord1.py
+!main.py

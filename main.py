@@ -4,6 +4,27 @@ from threading import Thread
 
 app = Flask(__name__)
 
+import discord
+from dotenv import load_dotenv
+
+from threading import Thread
+
+# bot = discord.Bot()
+
+load_dotenv()
+bot = discord.Bot()
+
+@bot.listen()
+async def on_ready():
+    print('ready')
+
+for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
+    name = i[:-3]
+
+    dt = importlib.import_module(f'commands.{name}')
+    func = eval(f'dt.{name}')
+    bot.command(description=dt.description)(func)
+
 @app.route("/")
 def main():
     return send_from_directory('client/dist', 'index.html')
@@ -67,16 +88,13 @@ def removeCommand():
     return jsonify({ 'code': 'success' })
 
 if __name__ == '__main__':
-    # global t1
-    # global t2
+    t1 = Thread(target=bot.run, args=(os.getenv('TOKEN'), ))
+    t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': True})
 
-    # t1 = Thread(target=bot.run)
-    # t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': False})
+    t1.start()
+    t2.start()
 
-    # t1.start()
-    # t2.start()
+    t1.join()
+    t2.join()
 
-    # t1.join()
-    # t2.join()
-
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    # IDEA: wsgi
