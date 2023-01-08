@@ -23,4 +23,4 @@ $ npm run build
 - [ ] Add status
 - [ ] Add reload / stop / start button
 
-> 오늘의 노래: The Living Tombstone - My Ordinary Life
+> 오늘의 노래: Arizona Zervas - ROXANNE
