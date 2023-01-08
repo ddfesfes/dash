@@ -88,6 +88,7 @@ def removeCommand():
     return jsonify({ 'code': 'success' })
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     t1 = Thread(target=bot.run, args=(os.getenv('TOKEN'), ))
     t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': True})
 
@@ -98,3 +99,6 @@ if __name__ == '__main__':
     t2.join()
 
     # IDEA: wsgi
+=======
+    app.run(host='127.0.0.1', port=5000, debug=True)
+>>>>>>> 6eda54ae01a124990075d21c91cccb3f3c2f86b4
