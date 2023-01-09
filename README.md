@@ -23,4 +23,5 @@ $ npm run build
 - [ ] Add status
 - [ ] Add reload / stop / start button
 
-> 오늘의 노래: Arizona Zervas - ROXANNE
+> 오늘의 노래: NewJeans - OMG
+> 내 취향: Andrew Bird - Sisyphus
