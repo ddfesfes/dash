@@ -30,7 +30,7 @@
   }
 
   async function submit() {
-    await fetch("/addCommand", {
+    await fetch("/command", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@
   }
 
   async function tokenSubmit() {
-    await fetch("/changeToken", {
+    await fetch("/token", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@
   }
 
   async function getCommands() {
-    const res = await fetch('/getCommands');
+    const res = await fetch('/command');
     const data = JSON.stringify(await res.json());
 
     return data;
