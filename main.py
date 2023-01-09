@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
-import json, os, importlib
+import json, os, importlib, re
 from threading import Thread
 
 app = Flask(__name__)
@@ -33,68 +33,86 @@ def main():
 def home(path):
     return send_from_directory('client/dist', path)
 
-@app.route('/changeToken', methods=['POST'])
-def changeToken():
-    args = json.loads(request.get_data().decode('utf-8'))
+@app.route('/token', methods=['GET', 'POST'])
+def token():
+    if request.method == 'POST':
+        args = json.loads(request.get_data().decode('utf-8'))
 
-    with open('.env', 'w', encoding='utf-8') as f:
-        f.write(f'TOKEN={args["TOKEN"]}')
+        with open('.env', 'w', encoding='utf-8') as f:
+            f.write(f'TOKEN={args["TOKEN"]}')
 
-    return jsonify({ 'a': True })
+        return jsonify({ 'a': True })
 
-@app.route('/addCommand', methods=['POST'])
-def addCommand():
-    args = json.loads(request.get_data().decode('utf-8'))
+    elif request.method == 'GET':
+        with open('.env', 'r', encoding='utf-8') as f:
+            data = re.sub('TOKEN=(.*)', '$1', f.read())
 
-    with open(f'./commands/{args["commandName"]}.py', 'w', encoding='utf-8') as f:
-        f.write(f'description = "{args["description"]}"\nresponse = "{args["response"]}"\n\nasync def {args["commandName"]}(ctx):\n\tawait ctx.respond(response)')
+        return jsonify({ 'token': data })
 
-    return jsonify({ 'a': True })
+@app.route('/command', methods=['GET', 'POST'])
+def commands():
+    if request.method == 'GET':
+        commandList = []
 
-@app.route('/getCommands', methods=['GET'])
-def getCommands():
-    commandList = []
+        for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
+            name = i[:-3]
+            jsonData = {}
+            jsonData['commandName'] = name
+            
+            commandList.append(jsonData)
 
-    for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
-        name = i[:-3]
+        return jsonify(commandList)
+    elif request.method == 'POST':
+        args = json.loads(request.get_data().decode('utf-8'))
+
+        with open(f'./commands/{args["commandName"]}.py', 'w', encoding='utf-8') as f:
+            f.write(f'description = "{args["description"]}"\nresponse = "{args["response"]}"\n\nasync def {args["commandName"]}(ctx):\n\tawait ctx.respond(response)')
+
+        return jsonify({ 'a': True })
+
+@app.route('/command/<commandName>', methods=['GET', 'REMOVE'])
+def command(commandName):
+    if request.method == 'GET':
+        commandList = []
+        com = []
+
+        for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
+            name = i[:-3]
+            commandList.append(name)
         
-        dt = importlib.import_module(f'commands.{name}')
+        if commandName in commandList:
+            dt = importlib.import_module(f'commands.{commandName}')
 
-        jsonData = {}
+            jsonData = {}
 
-        jsonData['description'] = dt.description
-        jsonData['commandName'] = name
-        jsonData['response'] = dt.response
+            jsonData['description'] = dt.description
+            jsonData['commandName'] = commandName
+            jsonData['response'] = dt.response
 
-        commandList.append(jsonData)
+            com.append(jsonData)
+        
+        return jsonify(com)
 
-    return jsonify(commandList)
+    elif request.method == 'REMOVE':
+        commandList = []
 
-@app.route('/removeCommand', methods=['POST'])
-def removeCommand():
-    args = json.loads(request.get_data().decode('utf-8'))
+        for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
+            name = i[:-3]
+            commandList.append(name)
 
-    commandList = []
+        if commandName not in commandList:
+            return jsonify({ 'error': 'Command Not Found!' })
+        else:
+            os.remove(f'./commands/{commandName}.py')
 
-    for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
-        name = i[:-3]
-        commandList.append(name)
-
-    if args['commandName'] not in commandList:
-        return jsonify({ 'error': 'Command Not Found!' })
-    else:
-        os.remove(f'./commands/{args["commandName"]}.py')
-
-    return jsonify({ 'code': 'success' })
+        return jsonify({ 'code': 'success' })
 
 if __name__ == '__main__':
-    t1 = Thread(target=bot.run, args=(os.getenv('TOKEN'), ))
+    # t1 = Thread(target=bot.run, args=(os.getenv('TOKEN'), ))
     t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': True})
 
-    t1.start()
+    # t1.start()
     t2.start()
 
-    t1.join()
+    # t1.join()
     t2.join()
-
-    # IDEA: wsgi
