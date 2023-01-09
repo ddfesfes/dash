@@ -1,5 +1,5 @@
 description = "geq"
-response = "gewq"
+response = "gefa"
 
-async def ff(ctx):
+async def example(ctx):
 	await ctx.respond(response)

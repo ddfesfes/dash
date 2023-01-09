@@ -65,7 +65,7 @@ async def ${title}(ctx):
   let commandName = title, des = description, res = response;
 
   async function submit() {
-    await fetch("/addCommand", {
+    await fetch("/command", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -83,14 +83,11 @@ async def ${title}(ctx):
   }
 
   async function remove() {
-    await fetch(`/removeCommand`, {
-      method: "POST",
+    await fetch(`/command/${title}`, {
+      method: "REMOVE",
       headers: {
           "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-          commandName: title
-      }),
     });
 
     changed();

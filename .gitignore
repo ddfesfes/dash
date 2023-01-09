@@ -30,8 +30,8 @@ dist-ssr
 __pycache__
 
 # Own Files
-commands/*
 assets
 *.py
+!commands/example.py
 !discord1.py
 !main.py
