@@ -118,7 +118,7 @@ async def ping(ctx):
         <input type="text" class="txt-input" id="description" placeholder="커맨드의 설명을 입력해주세요." bind:value={description}>
       </div>
 
-      <div class="dust-class">
+      <div class="dust-class">  
         <label for="response"><span>* </span>응답</label>
         <input type="text" class="txt-input" id="response" placeholder="커맨드의 응답을 입력해주세요." bind:value={response}>
       </div>

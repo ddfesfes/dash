@@ -56,9 +56,15 @@ def commands():
 
         for i in list(filter(lambda x: x.endswith('.py'), os.listdir('./commands'))):
             name = i[:-3]
-            jsonData = {}
-            jsonData['commandName'] = name
             
+            dt = importlib.import_module(f'commands.{name}')
+
+            jsonData = {}
+
+            jsonData['description'] = dt.description
+            jsonData['commandName'] = name
+            jsonData['response'] = dt.response
+
             commandList.append(jsonData)
 
         return jsonify(commandList)
@@ -109,10 +115,12 @@ def command(commandName):
 
 if __name__ == '__main__':
     # t1 = Thread(target=bot.run, args=(os.getenv('TOKEN'), ))
-    t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': True})
+    # t2 = Thread(target=app.run, kwargs={'host': '127.0.0.1', 'port': 5000, 'debug': True})
 
     # t1.start()
-    t2.start()
+    # t2.start()
 
     # t1.join()
-    t2.join()
+    # t2.join()
+
+    app.run(host='127.0.0.1', port=5000, debug=True)
